@@ -46,8 +46,8 @@ const unavailbilityAlert = ".MuiAlert-message.muirtl-1xsto0d"
 
 //GO TO PAGE
 await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36")
-await page.setDefaultNavigationTimeout(60000);
-await page.goto("https://minha.anem.dz/pre_inscription/" , { waitUntil: "networkidle2" })
+await page.setDefaultNavigationTimeout(120000);
+await page.goto("https://minha.anem.dz/pre_inscription/" , { waitUntil: "networkidle2" } , console.log("PAGE LOADED"));
 await page.screenshot({path:"screenshothome.png"} , console.log("TOOK SCREENSHOT"));
 
 
