@@ -65,13 +65,15 @@ await page.goto("https://minha.anem.dz" , { waitUntil: "domcontentloaded" , time
 
   
     //TRY TO LOGIN
-   
+   if(await page.waitForSelector(registerbutton)){
+
     await page.click(registerbutton)
     await page.waitForSelector(SendButton)
     await page.type("#numeroWassit", wassitnumber);
     await page.type("#numeroPieceIdentite", Govid);
     await page.click(SendButton);
 
+}
 
 
     //IF LOGIN IS SUCCESSFULL
@@ -187,10 +189,10 @@ app.listen(port, () => {
 
 
 
+app.get("/stop" , async(req , res) => {
 
-
-
-
+    process.exit(1);
+})
 
 
 
