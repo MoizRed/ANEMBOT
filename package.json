@@ -17,6 +17,6 @@
     "express": "^5.1.0",
     "morgan": "^1.10.0",
     "nodemon": "^3.1.9",
-    "puppeteer": "^24.6.1"
+    "puppeteer": "^19.7.2"
   }
 }
