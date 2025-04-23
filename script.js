@@ -187,7 +187,7 @@ app.listen(port, () => {
 
 
 
-//PROCESS ARG TO CLEAR THE CACHE --Clear
+//--------------------------------------------PROCESS ARG TO CLEAR THE CACHE --Clear--------------------------------------------
 
 if (process.argv[2] == "--clear"){
     if (fs.existsSync("timedScreenshots")){
