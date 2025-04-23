@@ -41,6 +41,7 @@ const browser = await puppeteer.launch({
 const page  = await browser.newPage();
 setInterval(async() => {
 //CSS SELECTORS
+const registerbutton = "div.MuiGrid-root.MuiGrid-item.muirtl-1wxaqej > a.MuiButtonBase-root" 
 const SendButton = "button.MuiButtonBase-root.MuiButton-root.MuiLoadingButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-root.MuiLoadingButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.muirtl-1m3iqmv"
 const continueButton = "button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.muirtl-1om64lz"
 const unavailbilityAlert = ".MuiAlert-message.muirtl-1xsto0d"
@@ -55,7 +56,7 @@ await page.setExtraHTTPHeaders({
 
 
 await page.goto("https://google.com" , { waitUntil: "networkidle2" } , console.log("Google page loaded"));
-await page.goto("https://minha.anem.dz/pre_inscription/" , { waitUntil: "domcontentloaded" , timeout: 600000}, console.log("PAGE LOADED"));
+await page.goto("https://minha.anem.dz" , { waitUntil: "domcontentloaded" , timeout: 600000}, console.log("PAGE LOADED"));
 //await page.screenshot({path:"screenshothome.png"} , console.log("TOOK SCREENSHOT"));
 
 
@@ -65,7 +66,8 @@ await page.goto("https://minha.anem.dz/pre_inscription/" , { waitUntil: "domcont
   
     //TRY TO LOGIN
    
-
+    await page.click(registerbutton)
+    await page.waitForSelector(SendButton)
     await page.type("#numeroWassit", wassitnumber);
     await page.type("#numeroPieceIdentite", Govid);
     await page.click(SendButton);
