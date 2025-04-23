@@ -27,7 +27,6 @@ try{
     const token = process.env.TOKEN
 //LAUNCH
 const browser = await puppeteer.launch({
-   // executablePath: '/opt/render/.cache/puppeteer/chrome/linux-135.0.7049.84/chrome-linux64/chrome',
     headless: true,
     executablePath : process.env.NODE_ENV == "start" ? process.env.PUPPETEER_EXECUTABLE_PATH : puppeteer.executablePath() ,
     defaultViewport: {
@@ -35,7 +34,7 @@ const browser = await puppeteer.launch({
         height : 1080
 
     },
-    args: ['--no-sandbox', '--disable-setuid-sandbox' , '--single-process' , ["--no-zygote"]]
+    args: ['--no-sandbox', '--disable-setuid-sandbox' , '--single-process' , "--no-zygote"]
 
 
 });
