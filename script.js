@@ -20,7 +20,7 @@ app.use(morgan("dev"));
 app.get("/run" , async(req , res) => {
 
 
-
+console.log("TRIGGERD , RUNNING THE SCRIPT")
 //HIGHLY IMPORTANT VARIABLES
     const wassitnumber = process.env.ANEMNUMERO
     const Govid = process.env.GOVNID
@@ -28,7 +28,7 @@ app.get("/run" , async(req , res) => {
 //LAUNCH
 const browser = await puppeteer.launch({
     headless : true,
-    args: ['--disable-setuid-sandbox' , '--no-sandbox' , '--single-process' , "--no-zygote",],
+    args: ['--disable-setuid-sandbox' , '--no-sandbox' , '--single-process' , "--no-zygote",  '--disable-dev-shm-usage' ,],
     executablePath : process.env.NODE_ENV === "production" ? process.env.PUPPETEER_EXECUTABLE_PATH  : puppeteer.executablePath()  ,
     defaultViewport: {
         width : 1920,
@@ -46,7 +46,8 @@ const unavailbilityAlert = ".MuiAlert-message.muirtl-1xsto0d"
 
 //GO TO PAGE
 await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36")
-await page.goto("https://minha.anem.dz/pre_inscription/" ); //,  { waitUntil: "networkidle2" }
+await page.setDefaultNavigationTimeout(60000);
+await page.goto("https://minha.anem.dz/pre_inscription/" , { waitUntil: "networkidle2" })
 await page.screenshot({path:"screenshothome.png"} , console.log("TOOK SCREENSHOT"));
 
 
