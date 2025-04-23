@@ -55,8 +55,8 @@ await page.setExtraHTTPHeaders({
 
 
 await page.goto("https://google.com" , { waitUntil: "networkidle2" } , console.log("Google page loaded"));
-await page.goto("https://minha.anem.dz/pre_inscription/" , { waitUntil: "domcontentloaded" , timeout: 60000}, console.log("PAGE LOADED"));
-await page.screenshot({path:"screenshothome.png"} , console.log("TOOK SCREENSHOT"));
+await page.goto("https://minha.anem.dz/pre_inscription/" , { waitUntil: "domcontentloaded" , timeout: 600000}, console.log("PAGE LOADED"));
+//await page.screenshot({path:"screenshothome.png"} , console.log("TOOK SCREENSHOT"));
 
 
 
@@ -99,7 +99,7 @@ if (await page.waitForSelector(unavailbilityAlert)){
               fs.mkdirSync("timedScreenshots")
           }
 
-            await page.screenshot({path:`timedScreenshots/screenshot${Date()}.png`});
+           // await page.screenshot({path:`timedScreenshots/screenshot${Date()}.png`});
 
 
             //send the user informationn via AXIOS
