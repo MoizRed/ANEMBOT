@@ -23,4 +23,4 @@ RUN npm ci
 COPY . .
 
 # Start the application
-CMD ["node", "dist/app.js"]
+CMD ["node", "script.js"]
