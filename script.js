@@ -31,8 +31,8 @@ const browser = await puppeteer.launch({
     args: ['--disable-setuid-sandbox' , '--no-sandbox' , '--single-process' , "--no-zygote",  '--disable-dev-shm-usage' ,],
     executablePath : process.env.NODE_ENV === "production" ? process.env.PUPPETEER_EXECUTABLE_PATH  : puppeteer.executablePath()  ,
     defaultViewport: {
-        width : 1920,
-        height : 1080
+        width : 500,
+        height : 400
     },
 
 });
