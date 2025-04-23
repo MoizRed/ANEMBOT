@@ -28,12 +28,13 @@ console.log("TRIGGERD , RUNNING THE SCRIPT")
 //LAUNCH
 const browser = await puppeteer.launch({
     headless : true,
-    args: ['--disable-setuid-sandbox' , '--no-sandbox' , '--single-process' , "--no-zygote",  '--disable-dev-shm-usage' ,],
+    args: ['--disable-setuid-sandbox' , '--no-sandbox' , '--single-process' , "--no-zygote",  '--disable-dev-shm-usage' , '--ignore-certificate-errors', '--ignore-certificate-errors-spki-list', ],
     executablePath : process.env.NODE_ENV === "production" ? process.env.PUPPETEER_EXECUTABLE_PATH  : puppeteer.executablePath()  ,
     defaultViewport: {
         width : 500,
         height : 400
     },
+    ignoreHTTPSErrors: true,
 
 });
 
