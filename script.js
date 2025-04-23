@@ -27,6 +27,7 @@ try{
     const token = process.env.TOKEN
 //LAUNCH
 const browser = await puppeteer.launch({
+    executablePath: '/opt/render/.cache/puppeteer/chrome/linux-135.0.7049.84/chrome-linux64/chrome',
     headless: true,
     defaultViewport: {
         width : 1920,
