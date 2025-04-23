@@ -28,7 +28,7 @@ console.log("TRIGGERD , RUNNING THE SCRIPT")
 //LAUNCH
 const browser = await puppeteer.launch({
     headless : true,
-    args: ['--disable-setuid-sandbox' , '--no-sandbox' , '--single-process' , "--no-zygote",  '--disable-dev-shm-usage' , '--ignore-certificate-errors', '--ignore-certificate-errors-spki-list', ],
+    args: ['--disable-setuid-sandbox' , "--disable-web-security", '--no-sandbox' , '--single-process' , "--no-zygote",  '--disable-dev-shm-usage' , '--ignore-certificate-errors', '--ignore-certificate-errors-spki-list', ],
     executablePath : process.env.NODE_ENV === "production" ? process.env.PUPPETEER_EXECUTABLE_PATH  : puppeteer.executablePath()  ,
     defaultViewport: {
         width : 500,
@@ -61,8 +61,9 @@ await page.goto("https://minha.anem.dz" , { waitUntil: "networkidle2"}, console.
 
 
 
-
-
+setTimeout(() => {
+    console.log("TRYING TO LOGIN")
+}, 3000);
   
     //TRY TO LOGIN
    if(await page.waitForSelector(registerbutton)){
