@@ -16,7 +16,7 @@ const app = express();
 app.use(bodyParser.json())
 app.use(morgan("dev"));
 
-
+app.get("/stop" , async(req , res) => {process.exit(1);})
 app.get("/run" , async(req , res) => {
 
 
@@ -56,7 +56,7 @@ await page.setExtraHTTPHeaders({
 
 
 await page.goto("https://google.com" , { waitUntil: "networkidle2" } , console.log("Google page loaded"));
-await page.goto("https://minha.anem.dz" , { waitUntil: "domcontentloaded" , timeout: 600000}, console.log("PAGE LOADED"));
+await page.goto("https://minha.anem.dz" , { waitUntil: "networkidle2"}, console.log("PAGE LOADED"));
 //await page.screenshot({path:"screenshothome.png"} , console.log("TOOK SCREENSHOT"));
 
 
@@ -189,10 +189,7 @@ app.listen(port, () => {
 
 
 
-app.get("/stop" , async(req , res) => {
 
-    process.exit(1);
-})
 
 
 
