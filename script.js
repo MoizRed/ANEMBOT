@@ -17,6 +17,8 @@ app.use(bodyParser.json())
 app.use(morgan("dev"));
 
 
+app.get("/run" , (req , res) )=> {
+    
 
 (async()=>{
 
@@ -131,7 +133,8 @@ if (await page.waitForSelector(unavailbilityAlert)){
 
 })() //call the function
 
-
+res.send(200).send("running")
+}
 
 
 
