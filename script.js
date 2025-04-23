@@ -17,10 +17,8 @@ app.use(bodyParser.json())
 app.use(morgan("dev"));
 
 
-app.get("/run" , (req , res) )=> {
-    
+app.get("/run" , async(req , res) => {
 
-(async()=>{
 
 
 //HIGHLY IMPORTANT VARIABLES
@@ -131,10 +129,10 @@ if (await page.waitForSelector(unavailbilityAlert)){
 }, 10000)   //1 HOUR
 
 
-})() //call the function
+ //call the function
 
 res.send(200).send("running")
-}
+})
 
 
 
