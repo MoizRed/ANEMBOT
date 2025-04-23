@@ -17,7 +17,7 @@ app.use(bodyParser.json())
 app.use(morgan("dev"));
 
 
-try{
+
 (async()=>{
 
 
@@ -131,7 +131,6 @@ if (await page.waitForSelector(unavailbilityAlert)){
 
 })() //call the function
 
-}catch(err){console.log(err)}
 
 
 
