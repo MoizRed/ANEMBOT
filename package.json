@@ -1,0 +1,22 @@
+{
+  "name": "anembot",
+  "version": "0.0.1",
+  "description": "unemployment grant checker",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon script.js",
+    "start" : "node script.js"
+  },
+  "author": "redmoiz",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.8.4",
+    "body-parser": "^2.2.0",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "morgan": "^1.10.0",
+    "nodemon": "^3.1.9",
+    "puppeteer": "^24.6.1"
+  }
+}
