@@ -28,7 +28,7 @@ try{
 //LAUNCH
 const browser = await puppeteer.launch({
     headless: true,
-    executablePath : process.env.PUPPETEER_EXECUTABLE_PATH,
+    executablePath : process.env.NODE_ENV == "start" ? process.env.PUPPETEER_EXECUTABLE_PATH : puppeteer.executablePath() ,
     defaultViewport: {
         width : 1920,
         height : 1080
