@@ -27,14 +27,14 @@ try{
     const token = process.env.TOKEN
 //LAUNCH
 const browser = await puppeteer.launch({
-    headless: true,
-    executablePath : process.env.NODE_ENV == "start" ? process.env.PUPPETEER_EXECUTABLE_PATH : puppeteer.executablePath() ,
+    args: ['--disable-setuid-sandbox' , '--no-sandbox' , '--single-process' , "--no-zygote",],
+    executablePath : process.env.NODE_ENV === "start" ? process.env.PUPPETEER_EXECUTABLE_PATH : puppeteer.executablePath() ,
     defaultViewport: {
         width : 1920,
         height : 1080
 
     },
-    args: ['--no-sandbox', '--disable-setuid-sandbox' , '--single-process' , "--no-zygote"]
+   
 
 
 });
