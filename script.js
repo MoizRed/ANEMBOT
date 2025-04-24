@@ -5,8 +5,12 @@ import morgan from "morgan";
 import bodyParser from "body-parser";
 import axios from 'axios'
 import fs from "fs";
+import puppeteerExtraPluginStealth from "puppeteer-extra-plugin-stealth";
+import puppeteerExtra from "puppeteer-extra";
+
 configDotenv();
 
+puppeteerExtra.use(puppeteerExtraPluginStealth());
 
 
 const port = process.env.PORT || 10000
@@ -26,7 +30,7 @@ console.log("TRIGGERD , RUNNING THE SCRIPT")
     const Govid = process.env.GOVNID
     const token = process.env.TOKEN
 //LAUNCH
-const browser = await puppeteer.launch({
+const browser = await puppeteerExtra.launch({
     headless : true,
     args: ['--disable-setuid-sandbox' , "--disable-web-security", '--no-sandbox' , '--single-process' , "--no-zygote",  '--disable-dev-shm-usage' , '--ignore-certificate-errors', '--ignore-certificate-errors-spki-list', ],
     executablePath : process.env.NODE_ENV === "production" ? process.env.PUPPETEER_EXECUTABLE_PATH  : puppeteer.executablePath()  ,
@@ -57,7 +61,7 @@ await page.setExtraHTTPHeaders({
 
 await page.goto("https://google.com" , { waitUntil: "networkidle2" } , console.log("Google page loaded"));
 await page.goto("https://minha.anem.dz" , { waitUntil: "networkidle2"}, console.log("PAGE LOADED"));
-//await page.screenshot({path:"screenshothome.png"} , console.log("TOOK SCREENSHOT"));
+await page.screenshot({path:"screenshothome.png"} , console.log("TOOK SCREENSHOT"));
 
 
 
@@ -104,7 +108,7 @@ if (await page.waitForSelector(unavailbilityAlert)){
               fs.mkdirSync("timedScreenshots")
           }
 
-           // await page.screenshot({path:`timedScreenshots/screenshot${Date()}.png`});
+           await page.screenshot({path:`timedScreenshots/screenshot${Date()}.png`});
 
 
             //send the user informationn via AXIOS
