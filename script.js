@@ -41,7 +41,7 @@ const browser = await puppeteerExtra.launch({
     ignoreHTTPSErrors: true,
 
 })
-console.log(process.env.PROXY)
+
 
 const page  = await browser.newPage();
 setInterval(async() => {
@@ -59,8 +59,6 @@ await page.setExtraHTTPHeaders({
     'Accept-Encoding': 'gzip, deflate, br'
   });
 
-
-await page.goto("https://google.com" , { waitUntil: "networkidle2" } , console.log("Google page loaded"));
 
 
 await page.goto("https://minha.anem.dz" ,  { waitUntil: "domcontentloaded" , timeout : 120000}, console.log("PAGE LOADED") );
