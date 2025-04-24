@@ -32,7 +32,7 @@ console.log("TRIGGERD , RUNNING THE SCRIPT")
 //LAUNCH
 const browser = await puppeteerExtra.launch({
     headless : true,
-    args: ['--disable-setuid-sandbox' , "--disable-web-security", '--no-sandbox' , '--single-process' , "--no-zygote",  '--disable-dev-shm-usage' , '--ignore-certificate-errors', '--ignore-certificate-errors-spki-list', ],
+    args: [ `--proxy-server=${process.env.PROXY}`,'--disable-setuid-sandbox' , "--disable-web-security", '--no-sandbox' , '--single-process' , "--no-zygote",  '--disable-dev-shm-usage' , '--ignore-certificate-errors', '--ignore-certificate-errors-spki-list', ],
     executablePath : process.env.NODE_ENV === "production" ? process.env.PUPPETEER_EXECUTABLE_PATH  : puppeteer.executablePath()  ,
     defaultViewport: {
         width : 500,
@@ -40,7 +40,8 @@ const browser = await puppeteerExtra.launch({
     },
     ignoreHTTPSErrors: true,
 
-});
+})
+console.log(process.env.PROXY)
 
 const page  = await browser.newPage();
 setInterval(async() => {
