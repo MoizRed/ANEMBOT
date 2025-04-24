@@ -60,15 +60,15 @@ await page.setExtraHTTPHeaders({
 
 
 await page.goto("https://google.com" , { waitUntil: "networkidle2" } , console.log("Google page loaded"));
-await page.goto("https://minha.anem.dz" , { waitUntil: "networkidle2"}, console.log("PAGE LOADED"));
+
+
+await page.goto("https://minha.anem.dz" ,  { waitUntil: "domcontentloaded" , timeout : 120000}, console.log("PAGE LOADED") );
+
+
 await page.screenshot({path:"screenshothome.png"} , console.log("TOOK SCREENSHOT"));
 
 
 
-setTimeout(() => {
-    console.log("TRYING TO LOGIN")
-}, 3000);
-  
     //TRY TO LOGIN
    if(await page.waitForSelector(registerbutton)){
 
