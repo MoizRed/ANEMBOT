@@ -31,12 +31,12 @@ console.log("TRIGGERD , RUNNING THE SCRIPT")
     const token = process.env.TOKEN
 //LAUNCH
 const browser = await puppeteerExtra.launch({
-    headless : true,
-    args: [ `--proxy-server=${process.env.PROXY}`,'--disable-setuid-sandbox' , "--disable-web-security", '--no-sandbox' , '--single-process' , "--no-zygote",  '--disable-dev-shm-usage' , '--ignore-certificate-errors', '--ignore-certificate-errors-spki-list', ],
+    headless : false,
+    args: [ '--disable-setuid-sandbox' , "--disable-web-security", '--no-sandbox' , '--single-process' , "--no-zygote",  '--disable-dev-shm-usage' , '--ignore-certificate-errors', '--ignore-certificate-errors-spki-list', ],
     executablePath : process.env.NODE_ENV === "production" ? process.env.PUPPETEER_EXECUTABLE_PATH  : puppeteer.executablePath()  ,
     defaultViewport: {
-        width : 500,
-        height : 400
+        width : 1920,
+        height : 1080
     },
     ignoreHTTPSErrors: true,
 
@@ -53,16 +53,12 @@ const unavailbilityAlert = ".MuiAlert-message.muirtl-1xsto0d"
 
 //GO TO PAGE
 await page.setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36")
-await page.setDefaultNavigationTimeout(120000);
-await page.setExtraHTTPHeaders({
-    'Accept-Language': 'en-US,en;q=0.9',
-    'Accept-Encoding': 'gzip, deflate, br'
-  });
+await page.setDefaultNavigationTimeout(0);
 
-
-
-await page.goto("https://minha.anem.dz" ,  { waitUntil: "domcontentloaded" , timeout : 120000}, console.log("PAGE LOADED") );
-
+await page.goto("https://minha.anem.dz" ,  { waitUntil: 'domcontentloaded', timeout:0}).then(async()=>{
+    console.log("PAGE LOADED")
+    //REST OF THE CODE
+})
 
 await page.screenshot({path:"screenshothome.png"} , console.log("TOOK SCREENSHOT"));
 
@@ -138,7 +134,7 @@ if (await page.waitForSelector(unavailbilityAlert)){
 
 
 
-}, 10000)   //1 HOUR
+}, 5000)   //1 HOUR
 
 
  //call the function
