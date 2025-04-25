@@ -20,11 +20,15 @@ const app = express();
 app.use(bodyParser.json())
 app.use(morgan("dev"));
 
-app.get("/stop" , async(req , res) => {process.exit(1);})
-app.get("/run" , async(req , res) => {
+app.get("/stop" , async(req , res) => {
+    res.send("Server Stopped")
+    process.exit(0)
+    
+})
 
 
-console.log("TRIGGERD , RUNNING THE SCRIPT")
+
+
 //HIGHLY IMPORTANT VARIABLES
     const wassitnumber = process.env.ANEMNUMERO
     const Govid = process.env.GOVNID
@@ -44,6 +48,8 @@ const browser = await puppeteerExtra.launch({
 
 
 const page  = await browser.newPage();
+app.get("/run" , async(req , res) => {
+    console.log("TRIGGERD , RUNNING THE SCRIPT")
 setInterval(async() => {
 //CSS SELECTORS
 const registerbutton = "div.MuiGrid-root.MuiGrid-item.muirtl-1wxaqej > a.MuiButtonBase-root" 
@@ -103,12 +109,28 @@ if (await page.waitForSelector(unavailbilityAlert)){
               fs.mkdirSync("timedScreenshots")
           }
 
-           await page.screenshot({path:`timedScreenshots/screenshot${Date()}.png`});
-
+          const screenshotPath  = `timedScreenshots/screenshot${Date()}.png`
+          await page.screenshot({path:screenshotPath});
+       
 
             //send the user informationn via AXIOS
            
 
+
+
+        await  axios.post('https://graph.facebook.com/v21.0/me/messages', 
+            {
+                messaging_type: "RESPONSE",
+                message: { text: ` CHECKED at ${Date()} \n AND IT SEEMS LIKE THE SITE IS NOT OPEN  YET!`},
+                recipient: { id: "9735997846484080" }
+            }, 
+            {
+                headers: {
+                    Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+                    ContentType: "application/json"
+                }
+            }
+        )
 
             await page.reload();
 
@@ -134,7 +156,7 @@ if (await page.waitForSelector(unavailbilityAlert)){
 
 
 
-}, 5000)   //1 HOUR
+}, 10000)   //1 HOUR
 
 
  //call the function
@@ -167,13 +189,7 @@ app.get("/", (req, res) => {
     res.send("app is up and running");
 });
 
-//simple dummy test hook
-app.post("/webhook" , (req , res)=>{
-    console.log(req.body)
-    res.status(200).send("EVENT_RECEIVED");
 
-
-})
 
 //CRON JOB to keep alive
 app.get("/cron" , (req , res)=>{
