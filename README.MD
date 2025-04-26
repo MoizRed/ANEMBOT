@@ -1,11 +1,12 @@
 # Anembot
+
 Unemployment Grant Checker
 
-A simple script that checks if unemployment grants are available and sends a notification if they are.
+A simple script that checks if unemployment grants are available and sends a
+notification if they are.
 
-this script uses puppeteer package to open a browser and check if the unemployment grants are available.
-
-
+this script uses puppeteer package to open a browser and check if the
+unemployment grants are available.
 
 ## Installation
 
@@ -15,24 +16,20 @@ npm i puppeteer
 npm i dotenv
 ```
 
-
-
 ## Usage
 
 add your credentials in the .env file
+
 ```
 ANEMNUMERO=[your anem number]
 GOVNID=[your identity card number]
 ```
 
-```node script.js```
+`node script.js`
 
-## Launch options 
-
-
+## Launch options
 
 ```
-
 node script.js
 
 node script.js --clear //clears the screenshots in the cache folder
@@ -50,8 +47,7 @@ node script --send //sends a notification if the unemployment grants are availab
 node script --bg //runs the script in the background
 ```
 
-
 ### TODO
+
 integrate axios.\
-set time between checks launch options.
-add run in background launch option.
+set time between checks launch options. add run in background launch option.
