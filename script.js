@@ -10,6 +10,9 @@ import puppeteerExtra from "puppeteer-extra";
 
 configDotenv();
 
+
+
+
 puppeteerExtra.use(puppeteerExtraPluginStealth());
 
 const port = process.env.PORT || 10000;
@@ -21,17 +24,18 @@ app.use(morgan("dev"));
 
 app.get("/stop", async (req, res) => {
   res.send("Server Stopped");
-  process.exit(0);
+  interval = 6000000
 });
 
 //HIGHLY IMPORTANT VARIABLES
 const wassitnumber = process.env.ANEMNUMERO;
 const Govid = process.env.GOVNID;
-const token = process.env.TOKEN;
+
 //LAUNCH
 const browser = await puppeteerExtra.launch({
   headless: false,
   args: [
+ 
     "--disable-setuid-sandbox",
     "--disable-web-security",
     "--no-sandbox",
@@ -44,10 +48,6 @@ const browser = await puppeteerExtra.launch({
   executablePath: process.env.NODE_ENV === "production"
     ? process.env.PUPPETEER_EXECUTABLE_PATH
     : puppeteer.executablePath(),
-  defaultViewport: {
-    width: 1920,
-    height: 1080,
-  },
   ignoreHTTPSErrors: true,
 });
 
@@ -84,6 +84,7 @@ app.get("/run", async (req, res) => {
 
       await page.evaluate(() => {
         localStorage.setItem("i18nextLng", "fr");
+        
       });
       await page.reload();
 
@@ -103,6 +104,11 @@ app.get("/run", async (req, res) => {
           loginbutton,
           console.log("➤WAITED FOR LOGIN BUTTON"),
         );
+
+
+
+        //FILLING THE CREDENTIALS
+        /*
         await page.type(
           "#numeroWassit",
           wassitnumber,
@@ -113,9 +119,25 @@ app.get("/run", async (req, res) => {
           Govid,
           console.log("➤ENTERED GOVN ID"),
         );
-        await page.click(loginbutton, console.log("➤CLICKED LOGIN BUTTON"));
-      }
+*/
 
+  await page.evaluate((fields) => {
+  fields.forEach(({ selector, value }) => {
+    const input = document.querySelector(selector);
+    if (input) {
+      const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+      nativeInputValueSetter.call(input, value);
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+  });
+}, [
+  { selector: '#numeroWassit', value: wassitnumber },
+  { selector: '#numeroPieceIdentite', value: Govid }
+]);
+
+    await page.click(loginbutton, console.log("➤CLICKED LOGIN BUTTON"));
+        console.log("➤CLICKED LOGIN BUTTON");
+      }        
       //IF LOGIN IS SUCCESSFULL
 
       if (await page.waitForSelector(continueButton)) {
@@ -127,7 +149,7 @@ app.get("/run", async (req, res) => {
       if (await page.waitForSelector(unavailbilityAlert)) {
         console.log(
           `➤THE SITE STILL CLOSED (STILL NO DATE TO APPLY) , TYRING AGAIN IN ${
-            (process.env.INTERVAL) / 1000
+            (interval) / 1000
           } SECONDS`,
         );
         setTimeout(async () => {
@@ -141,22 +163,54 @@ app.get("/run", async (req, res) => {
             console.log("➤TOOK SCREENSHOT"),
           );
 
-          //send the user informationn via AXIOS
+          //UPLOAD ATTACHMENT TO PAGE
+          try {
+            await axios.post(
+              `https://graph.facebook.com/v21.0/${process.env.PAGE_ID}/message_attachments?access_token=${process.env.ACCESS_TOKEN}`,
+              {
+               
+                recipient: { id: "9735997846484080" },
+                message: {
+                  attachment: {
+                    type: "image",
+                    payload: {
+                      url: "https://i.imgur.com/nnVhCp9.png",
+                      is_reusable: true,
+                    },
+                  },
+                },
+              } ,{
+              headers: {
+                ContentType: "application/json",
+              },
+            }
+            );
+          } catch (err) {
+            console.log(err);
+          }
 
-          await axios.post("https://graph.facebook.com/v21.0/me/messages", {
-            messaging_type: "RESPONSE",
-            message: {
-              text:
-                ` CHECKED at ${Date()} \n AND IT SEEMS LIKE THE SITE IS NOT OPEN  YET!`,
-            },
-            recipient: { id: "9735997846484080" },
-          }, {
-            headers: {
-              Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
-              ContentType: "application/json",
-            },
-          }, console.log("➤➤➤➤SENT MESSAGE TO USER"));
-
+          //SEND MESSAGE TO USER
+          try {
+            await axios.post("https://graph.facebook.com/v21.0/me/messages", {
+              messaging_type: "RESPONSE",
+              message: {
+                text:
+                  ` CHECKED at ${Date()} \n AND IT SEEMS LIKE THE SITE IS NOT OPEN  YET!`,
+              },
+              recipient: { id: "9735997846484080" },
+            }, {
+              headers: {
+                Authorization: `Bearer ${process.env.ACCESS_TOKEN}`,
+                ContentType: "application/json",
+              },
+            }, console.log("➤➤➤➤SENT MESSAGE TO USER"));
+          } catch (error) {
+            if (error.status === 400) {
+              console.log(
+                "➤➤➤➤MESSAGE WAS NOT SENT TO USER , try sending a message to the page first",
+              );
+            }
+          }
           await page.reload(console.log("➤RELOADING THE PAGE"));
         }, 3000);
       } else {
@@ -171,8 +225,8 @@ app.get("/run", async (req, res) => {
         ///
       }
     },
-    process.env.INTERVAL,
-    console.log(`➤waiting for ${(process.env.INTERVAL) / 1000} SECONDS`),
+    interval,
+    console.log(`➤waiting for ${(interval) / 1000} SECONDS`),
   ); //10 SECONDS
 
   //call the function
@@ -186,7 +240,7 @@ app.get("/", (req, res) => {
   res.send("app is up and running");
 });
 
-//CRON JOB to keep alive
+//CRON JOB to keep alive if hosted on render
 app.get("/cron", (req, res) => {
   console.log("CRON JOB HAS BEEN TRIGGERED", Date());
   res.status(200).send("CRON JOB HAS BEEN TRIGGERED");
@@ -198,9 +252,10 @@ app.listen(port, () => {
   );
 });
 
-//--------------------------------------------PROCESS ARG TO CLEAR THE CACHE --Clear--------------------------------------------
-
-if (process.argv[2] == "--clear") {
+//--------------------------------------------PROCESS ARG --------------------------------------------
+//PROCESS ARG TO CLEAR THE CACHE --Clear
+for(let i = 0 ; i<=process.argv.length ; i++){
+if (process.argv[i] == "--clear") {
   if (fs.existsSync("timedScreenshots")) {
     fs.rmdirSync(
       "timedScreenshots",
@@ -215,3 +270,18 @@ if (process.argv[2] == "--clear") {
     process.exit(0);
   }
 }
+}
+//PROCESS ARG TO SET INTERVAL "-i"
+
+const getInterval = () => {
+  const defaultInterval = 10000 // 1 hour
+  const intervalIndex = process.argv.indexOf('-i');
+  
+  if (intervalIndex !== -1 && process.argv[intervalIndex + 1]) {
+    return Number(process.argv[intervalIndex + 1]);
+  }
+  
+  return defaultInterval;
+}
+const interval = getInterval();
+
